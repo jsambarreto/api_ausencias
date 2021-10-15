@@ -50,6 +50,24 @@ def recupera_dados_id(name_table, id):
     connection.close()
     return json.dumps([dict(r) for r in results],  ensure_ascii=False, default=alchemyencoder)
 
+def recupera_dados_ano(name_table, id, ano):
+    engine = create_engine(Connection.connection_url)
+    metadata = MetaData(bind=None)
+
+    smt = select(
+        Table(name_table, 
+            metadata,
+            autoload=True, 
+            autoload_with=engine)
+    ).where(and_(column('id')==id,column('Ano')==ano))
+
+    connection = engine.connect()
+
+    results = connection.execute(smt).fetchall()
+    connection.close()
+    return json.dumps([dict(r) for r in results],  ensure_ascii=False, default=alchemyencoder)
+
+
 
 
  
